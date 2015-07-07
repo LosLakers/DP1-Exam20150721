@@ -1,0 +1,60 @@
+body {
+
+}
+
+header {
+    background: black;
+    color: white;
+    padding-left: 1em;
+    padding-bottom: 1em;
+    padding-top: 1em;
+}
+
+div.left-half {
+    position: absolute;
+    left: 10px;
+    width: 25%;
+    background: grey;
+    height: 100%;
+}
+
+div.right-half {
+    position: absolute;
+    right: 0px;
+    width: 65%;
+    height: 100%;
+}
+
+ul.nav {
+    list-style-type: none;
+}
+
+table {
+    width: 70%;
+    border-collapse: collapse;
+}
+
+table, tr, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    height: 30px;
+    text-align: center;
+}
+
+.has-error {
+    color: red;
+    border-color: red;
+    border-style: solid;
+}
+
+.has-success {
+    color: green;
+    border-color: green;
+    border-style: solid;
+}
+
+.error-text {
+    text-align: center;
+}
