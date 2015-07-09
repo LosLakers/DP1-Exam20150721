@@ -1,5 +1,5 @@
 <?php
-include 'common_functions.php';
+include 'commons.php';
 include 'error_handling.php';
 
 session_start();

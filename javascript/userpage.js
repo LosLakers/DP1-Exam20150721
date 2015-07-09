@@ -15,4 +15,20 @@ $(document).ready(function () {
             $(input).remove();
         }
     });
+
+    $('form[name="addBooking"]').submit(function (event) {
+        if (!valid_time('#start_time') || !valid_time('#end_time')) {
+            event.preventDefault();
+        }
+    });
 });
+
+function valid_time(input) {
+    var value = $(input).val();
+    var regexp = /([01]?[0-9]|2[0-3]):([0-5][0-9])/g;
+    if (regexp.test(value)) {
+        return true;
+    } else {
+        return false;
+    }
+}

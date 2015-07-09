@@ -1,5 +1,5 @@
 <?php
-include 'common_functions.php';
+include 'commons.php';
 
 session_start();
 $error_message = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : "Nothing";

@@ -7,10 +7,13 @@ $error_messages = array(
     'ERROR LOGIN'               => 'Username and/or password are wrong, try again',
     'ERROR CREATE BOOKING'      => 'Error in performing a booking',
     'ERROR DELETE BOOKING'      => 'An error occurred in deleting a booking',
+    'ERROR NUMBER PARTICIPANTS' => 'Number of participants is not correct',
+    'ERROR TIME COMPARE'        => 'Error in comparing start time and end time',
     'ERROR JAVASCRIPT DISABLED' => 'This page needs Javascript to work properly',
 
     // success messages
     'SUCCESS USER INSERT'       => 'User successfully inserted',
+    'SUCCESS CREATE BOOKING'    => 'Booking successfully created',
     'SUCCESS DELETE BOOKING'    => 'Booking successfully deleted'
 );
 
