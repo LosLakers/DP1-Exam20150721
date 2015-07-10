@@ -40,6 +40,10 @@ if (isset($_SESSION['logged_time'])) {
                             $error = "ERROR TIME COMPARE";
                             break;
                         }
+                        if (!compare_time($_POST['start_time'], $_POST['end_time'])) {
+                            $error = "ERROR TIME COMPARE";
+                            break;
+                        }
                         $start_time = $_POST['start_time'] . ":00";
                         $end_time = $_POST['end_time'] . ":00";
 
@@ -157,14 +161,9 @@ if (isset($_SESSION['logged_time'])) {
                                     }
 
                                     // check if is possible to add the booking
-                                    $insert = true;
                                     $participants = intval($_POST['participants']);
-                                    foreach ($bookings as $value) {
-                                        if (($value + $participants) > Common::get_max_participants()) {
-                                            $insert = false;
-                                            break;
-                                        }
-                                    }
+                                    $insert = check_availability($bookings, $participants);
+
                                     $start_time = $_POST['start_time'] . ":00";
                                     $end_time = $_POST['end_time'] . ":00";
                                     if ($insert) $error = insert_record($conn, $_SESSION['username'], $participants, $start_time, $end_time);
@@ -186,8 +185,8 @@ if (isset($_SESSION['logged_time'])) {
                         // lock booking table WRITE
                         mysqli_query($conn, "LOCK TABLES bookings WRITE");
                         // check if booking.username = SESSION.username
-                        $where = "id='" . $id . "'";
-                        $query = sql_query_select("username", "bookings", $where, null);
+                        $where = "id='" . $id . "' AND username='".$_SESSION['username']."'";
+                        $query = sql_query_select("*", "bookings", $where, null);
                         if ($query != null) {
                             if (($res = mysqli_query($conn, $query)) !== false && mysqli_num_rows($res) == 1) {
                                 // remove booking from the list
