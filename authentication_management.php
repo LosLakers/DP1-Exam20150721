@@ -42,13 +42,16 @@ function session_expired()
 // login management
 function login($conn, $username, $password)
 {
+    $result = false;
+
     if ($username != '' && $password != '') {
         // protection against SQL injection
         $username = sql_clean_up($username);
         $password = sql_clean_up($password);
 
-        $where = "username='" . $username . "' AND password='" . $password . "'";
+        mysqli_query($conn, "LOCK TABLES users READ");
 
+        $where = "username='" . $username . "' AND password='" . $password . "'";
         $query = sql_query_select('*', 'users', $where, null);
         if ($query != null) {
             $res = mysqli_query($conn, $query);
@@ -58,14 +61,15 @@ function login($conn, $username, $password)
                 $_SESSION['name'] = $row['name'];
                 // save session time of login
                 $_SESSION['logged_time'] = time();
-                mysqli_free_result($res);
-                return true;
-            } else {
-                mysqli_free_result($res);
-                return false;
+                $result = true;
             }
+            mysqli_free_result($res);
         }
+
+        mysqli_query($conn, "UNLOCK TABLES");
     }
+
+    return $result;
 }
 
 // logout management

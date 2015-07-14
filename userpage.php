@@ -26,6 +26,7 @@ if (isset($_SESSION['logged_time'])) {
             switch ($_POST['status']) {
                 case "addbooking": {
                     if (isset($_POST['participants']) && isset($_POST['start_time']) && isset($_POST['end_time'])) {
+
                         // check validity participants -> > 0 V <= max participants
                         $participants = intval($_POST['participants']);
                         if ($participants < 0 || $participants > Common::get_max_participants()) {
@@ -34,12 +35,6 @@ if (isset($_SESSION['logged_time'])) {
                         }
 
                         // check start and end validity -> start < end
-                        $start_time = strtotime($_POST['start_time']);
-                        $end_time = strtotime($_POST['end_time']);
-                        if ($end_time === -1 || $start_time === -1 || $end_time <= $start_time) {
-                            $error = "ERROR TIME COMPARE";
-                            break;
-                        }
                         if (!compare_time($_POST['start_time'], $_POST['end_time'])) {
                             $error = "ERROR TIME COMPARE";
                             break;
@@ -56,6 +51,7 @@ if (isset($_SESSION['logged_time'])) {
                         $query = sql_query_select("*", "bookings", $where, $order);
                         if ($query != null) {
                             if (($res = mysqli_query($conn, $query)) !== false) {
+                                // no overlapped bookings -> insert record without any problem
                                 if (mysqli_num_rows($res) == 0) {
                                     // insert the new record
                                     $error = insert_record($conn, $_SESSION['username'], $participants, $start_time, $end_time);
@@ -179,13 +175,12 @@ if (isset($_SESSION['logged_time'])) {
                     break;
                 }
 
-                case
-                "deletebooking": {
+                case "deletebooking": {
                     if (isset($_POST['id']) && ($id = intval($_POST['id'])) > 0) {
                         // lock booking table WRITE
                         mysqli_query($conn, "LOCK TABLES bookings WRITE");
                         // check if booking.username = SESSION.username
-                        $where = "id='" . $id . "' AND username='".$_SESSION['username']."'";
+                        $where = "id='" . $id . "' AND username='" . $_SESSION['username'] . "'";
                         $query = sql_query_select("*", "bookings", $where, null);
                         if ($query != null) {
                             if (($res = mysqli_query($conn, $query)) !== false && mysqli_num_rows($res) == 1) {
@@ -208,6 +203,9 @@ if (isset($_SESSION['logged_time'])) {
                     }
                     break;
                 }
+
+                default:
+                    break;
             }
         }
     } else {
@@ -262,7 +260,7 @@ include 'error_message.php'
         <div>
             <form name="addBooking" method="post" action="userpage.php">
                 <fieldset>
-                    <legend><b>Booking Form</b></legend>
+                    <legend><b>Booking Form - Insert a new booking</b></legend>
                     <input type="hidden" name="status" value="addbooking"/>
 
                     <div>

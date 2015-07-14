@@ -83,11 +83,14 @@ include 'error_message.php';
     ?>
     <div class="right-half">
         <?php
+        mysqli_query($conn, "LOCK TABLES bookings READ");
         $query = sql_query_select("*", "bookings", NULL, "participants DESC");
         if ($query != null) {
-            if ($res = mysqli_query($conn, $query)) {
+            ?>
+            <h3>Overview Bookings</h3>
+            <?php
+            if (($res = mysqli_query($conn, $query)) !== false && mysqli_num_rows($res) > 0) {
                 ?>
-                <h3>Overview Bookings</h3>
                 <table>
                     <thead>
                     <tr>
@@ -105,16 +108,19 @@ include 'error_message.php';
                             <td><?= sql_string_time($row['start_time']) ?></td>
                             <td><?= sql_string_time($row['end_time']) ?></td>
                         </tr>
-                    <?php
+                        <?php
                     } ?>
                     </tbody>
                 </table>
-            <?php
+                <?php
                 mysqli_free_result($res);
             } else {
-                // TODO no bookings found
+                ?>
+                <p>No bookings are present at this time</p>
+                <?php
             }
         }
+        mysqli_query($conn, "UNLOCK TABLES");
         ?>
     </div>
 </div>

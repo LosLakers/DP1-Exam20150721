@@ -33,7 +33,7 @@ if (isset($_POST['status']) && $_POST['status'] == 'registration') {
 
             // check if the username is unique or not
             $select = "username";
-            $from = "user";
+            $from = "users";
             $where = "username='" . $username . "'";
             $query = sql_query_select($select, $from, $where, null);
             $res = mysqli_query($conn, $query);
@@ -45,7 +45,7 @@ if (isset($_POST['status']) && $_POST['status'] == 'registration') {
                 } else {
                     mysqli_free_result($res);
                     mysqli_autocommit($conn, false);
-                    $insert = "user(username, password, name)";
+                    $insert = "users(username, password, name)";
                     $values = "('" . $username . "', '" . $password . "' ,'" . $name . "')";
                     $query = sql_query_insert($insert, $values);
                     try {
